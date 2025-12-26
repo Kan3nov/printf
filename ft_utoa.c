@@ -6,15 +6,15 @@
 /*   By: klafi <klafi@learner.42.tech>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/25 12:25:45 by klafi             #+#    #+#             */
-/*   Updated: 2025/12/25 14:35:15 by klafi            ###   ########.fr       */
+/*   Updated: 2025/12/26 14:43:47 by klafi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static size_t	count_dig(unsigned int n)
+static int	count_dig(unsigned int n)
 {
-	size_t	count;
+	int	count;
 
 	count = 0;
 	if (n == 0)
@@ -37,17 +37,18 @@ static unsigned long	power(unsigned int base, int exp)
 	return (result);
 }
 
-char	*ft_utoa(unsigned int n)
+int	put_uint(unsigned int n)
 {
-	char	*s;
-	size_t	idx;
-	size_t	len;
+	char	dig;
+	int		len;
+	int		r_len;
 
 	len = count_dig(n);
-	s = malloc(len + 1);
-	idx = 0;
+	r_len = len;
 	while (len >= 1)
-		s[idx++] = '0' + n / power(10, len-- - 1) % 10;
-	s[idx] = 0;
-	return (s);
+	{
+		dig = '0' + n / power(10, len-- - 1) % 10;
+		ft_putchar_fd(dig, 1);
+	}
+	return (r_len);
 }

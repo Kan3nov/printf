@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: klafi <klafi@learner.42.tech>              +#+  +:+       +#+        */
+/*   By: klafi <kanan.lafi@learner.42.tech>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 16:25:19 by klafi             #+#    #+#             */
-/*   Updated: 2025/12/25 16:45:18 by klafi            ###   ########.fr       */
+/*   Updated: 2025/12/26 14:31:03 by klafi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	dig_num_hex(unsigned long dec)
 	return (dig_num);
 }
 
-char	*dec_to_hex(unsigned long dec)
+int	put_hex(unsigned long dec)
 {
 	int		dig;
 	int		dig_num;
@@ -43,31 +43,60 @@ char	*dec_to_hex(unsigned long dec)
 		else
 			hex[dig_num] = dig + '0';
 	}
-	return (hex);
+	ft_putstr_fd(hex, 1);
+	dig = ft_strlen(hex);
+	free(hex);
+	return (dig);
 }
 
-char	*gen_str(const char *s, int idx, va_list list)
+int	put_hex_cap(unsigned long dec)
 {
-	if (*(s + idx) == '%')
+	int		dig;
+	int		dig_num;
+	char	*hex;
+
+	dig_num = dig_num_hex(dec);
+	hex = malloc(dig_num + 1);
+	hex[dig_num] = 0;
+	while (--dig_num >= 0)
 	{
-		if (*(s + idx + 1) == 'c')
-			s = han_c(s, idx, list);
-		else if (*(s + idx + 1) == 's')
-			s = han_s(s, idx, list);
-		else if (*(s + idx + 1) == 'p')
-			s = han_p(s, idx, list);
-		else if (*(s + idx + 1) == 'd' || *(s + idx + 1) == 'i')
-			s = han_di(s, idx, list);
-		else if (*(s + idx + 1) == 'u')
-			s = han_u(s, idx, list);
-		else if (*(s + idx + 1) == 'x')
-			s = han_x(s, idx, list);
-		else if (*(s + idx + 1) == 'X')
-			s = han_xcap(s, idx, list);
-		else if (*(s + idx + 1) == '%')
-			s = han_mod(s, idx);
+		dig = dec % 16;
+		dec /= 16;
+		if (dig >= 10)
+			hex[dig_num] = 55 + dig;
+		else
+			hex[dig_num] = dig + '0';
 	}
-	return ((char *)s);
+	ft_putstr_fd(hex, 1);
+	dig = ft_strlen(hex);
+	free(hex);
+	return (dig);
+}
+
+int	gen_str(const char *s, int idx, va_list list, int len)
+{
+	if (*(s + idx) == 'c')
+		len += han_c(list);
+	else if (*(s + idx) == 's')
+		len += han_s(list);
+	else if (*(s + idx) == 'p')
+		len += han_p(list);
+	else if (*(s + idx) == 'd' || *(s + idx) == 'i')
+		len += han_di(list);
+	else if (*(s + idx) == 'u')
+		len += han_u(list);
+	else if (*(s + idx) == 'x')
+		len += han_x(list);
+	else if (*(s + idx) == 'X')
+		len += han_xcap(list);
+	else if (*(s + idx) == '%')
+		len += han_mod();
+	else
+	{
+		write(1, s + idx, 1);
+		len++;
+	}
+	return (len);
 }
 
 int	ft_printf(const char *s, ...)
@@ -78,20 +107,18 @@ int	ft_printf(const char *s, ...)
 
 	va_start(list, s);
 	idx = 0;
+	len = 0;
 	while (*(s + idx))
 	{
-		s = gen_str(s, idx, list);
+		if (*(s + idx) == '%')
+			len = gen_str(s, ++idx, list, len);
+		else
+		{
+			write(1, s + idx, 1);
+			++len;
+		}
 		idx++;
 	}
 	va_end(list);
-	ft_putstr_fd((char *)s, 1);
-	len = ft_strlen(s);
-	free((char *)s);
 	return (len);
-}
-
-int main(void)
-{
-	ft_printf("hello world %s %d\n","kanana", 12);
-	return (0);
 }

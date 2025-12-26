@@ -3,47 +3,52 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: klafi <klafi@learner.42.tech>              +#+  +:+       +#+        */
+/*   By: klafi <kanan.lafi@learner.42.tech>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 16:29:16 by klafi             #+#    #+#             */
-/*   Updated: 2025/12/25 16:06:03 by klafi            ###   ########.fr       */
+/*   Updated: 2025/12/26 18:33:11 by klafi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 
-# include "./libft/libft.h"
 # include <stdarg.h>
-//the subsequent include statements will be omitted after testing
-# include <stdio.h>
+# include <unistd.h>
+# include <stdlib.h>
 
 int		dig_num_hex(unsigned long dec);
 
-char	*dec_to_hex(unsigned long dec);
+int		put_hex(unsigned long dec);
 
-char	*han_c(char const *s, int idx, va_list list);
+int		put_hex_cap(unsigned long dec);
 
-char	*han_s(char const *s, int idx, va_list list);
+int		han_c(va_list list);
 
-char	*han_p(char const *s, int idx, va_list list);
+int		han_s(va_list list);
 
-char	*han_di(char const *s, int idx, va_list list);
+int		han_p(va_list list);
 
-char	*han_u(char const *s, int idx, va_list list);
+int		han_di(va_list list);
 
-char	*han_x(char const *s, int idx, va_list list);
+int		han_u(va_list list);
 
-char	*han_xcap(char const *s, int idx, va_list list);
+int		han_x(va_list list);
 
-char	*han_mod(char const *s, int idx);
+int		han_xcap(va_list list);
 
-char	*str_ins(const char *org, const char *ins, int idx);
+int		han_mod(void);
 
 int		ft_printf(const char *s, ...);
 
-char	*ft_utoa(unsigned int n);
+int		put_uint(unsigned int n);
 
-char	*ft_strtoupper(char *s);
+int		put_int(int n);
+
+int		ft_strlen(const char *s);
+
+void	ft_putstr_fd(char *s, int fd);
+
+void	ft_putchar_fd(char c, int fd);
 
 #endif
