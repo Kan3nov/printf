@@ -6,7 +6,7 @@
 /*   By: klafi <kanan.lafi@learner.42.tech>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 16:25:19 by klafi             #+#    #+#             */
-/*   Updated: 2025/12/26 14:31:03 by klafi            ###   ########.fr       */
+/*   Updated: 2025/12/27 10:40:47 by klafi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ int	ft_printf(const char *s, ...)
 	int		idx;
 	int		len;
 
+	if (!s)
+		return (-1);
 	va_start(list, s);
 	idx = 0;
 	len = 0;
